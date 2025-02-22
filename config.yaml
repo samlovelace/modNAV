@@ -1,0 +1,25 @@
+robot:
+  type: SimpleRobot
+  name: SR-2024
+  nav_update_rate: 10 # Hz
+
+  sensors:
+    imu:
+      enabled: true
+      noise_covariance: 0.01
+      axis:
+        x: true
+        y: true
+        z: false
+
+    gps:
+      enabled: true
+      update_rate: 1 # Hz
+      position_covariance: 0.5
+
+  kalman_filter:
+    state_dim: 4
+    measurement_dim: 2
+    process_noise: 0.01
+    measurement_noise: 0.5
+    initial_covariance: 0.1
