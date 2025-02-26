@@ -34,6 +34,21 @@ bool ConfigManager::parseConfig(const std::string& aFilename)
 
     mConfig.mSettings.mUpdateRate = config["robot"]["nav_update_rate"].as<int>(); 
 
+    if(!config["robot"]["sensors"])
+    {
+        LOGE << "Sensors not properly configured"; 
+        return false; 
+    }
+
+    for(const auto& sensor : config["robot"]["sensors"])
+    {
+        std::string sensorType = sensor.first.as<std::string>(); 
+        std::string sensorName = sensor.second["name"].as<std::string>(); 
+        LOGD << "Using " << sensorName << " " << sensorType; 
+
+        std::shared_ptr<ISensor> s = SensorFactory::create(sensorType, sensorName); 
+        mConfig.mSensors.insert({sensorType, s});
+    }
 
     return true; 
 }

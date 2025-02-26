@@ -5,17 +5,12 @@ robot:
 
   sensors:
     imu:
-      enabled: true
+      name: gazebo
       noise_covariance: 0.01
-      axis:
-        x: true
-        y: true
-        z: false
 
     gps:
-      enabled: true
-      update_rate: 1 # Hz
-      position_covariance: 0.5
+      name: gazebo
+      noise_covariance: 0.5
 
   kalman_filter:
     state_dim: 4

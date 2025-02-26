@@ -13,9 +13,12 @@ find_package(yaml-cpp REQUIRED)
 
 set(SOURCES 
   ${CMAKE_CURRENT_LIST_DIR}/src/ConfigManager.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/GazeboImu.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/GazeboGps.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/KalmanFilter.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/main.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/RobotFactory.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/SensorFactory.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/SensorFusion.cpp  
   ${CMAKE_CURRENT_LIST_DIR}/src/SimpleRobot.cpp
 )

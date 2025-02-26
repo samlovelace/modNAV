@@ -12,14 +12,14 @@ public:
 
     enum class SensorType
     {
-        IMU, 
-        GPS, 
+        GAZEBO_IMU, 
+        GAZEBO_GPS, 
         NUM_TYPES
     }; 
 
-    static std::shared_ptr<ISensor> create(SensorType aType); 
-
-private:
+    static std::shared_ptr<ISensor> create(const std::string& aSensorType, const std::string& aSensorName); 
+    static SensorType stringToEnum(const std::string& aSensorType, const std::string& aSensorName);
+private: 
    
 };
 #endif //SENSORFACTORY_H
