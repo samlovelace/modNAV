@@ -9,7 +9,7 @@
 class SensorFusion 
 { 
 public:
-    SensorFusion(ConfigManager::Config aConfig); 
+    SensorFusion(ConfigManager::Config& aConfig); 
     ~SensorFusion();
 
     void run(); 
@@ -19,7 +19,7 @@ private:
     std::unique_ptr<KalmanFilter> mKalmanFilter; 
     std::map<std::string, std::shared_ptr<ISensor>> mSensors; 
 
-    ConfigManager::Config mConfig; 
+    ConfigManager::Config& mConfig; 
 
     void doSensorFusion(); 
 };

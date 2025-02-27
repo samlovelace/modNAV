@@ -29,7 +29,7 @@ public:
 
 
     bool parseConfig(const std::string& aFilename); 
-    Config getConfig() {return mConfig; }
+    Config& getConfig() {return mConfig; }
 
 private:
     ConfigManager() {}

@@ -8,6 +8,7 @@ endif()
 # find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
+find_package(sensor_msgs)
 find_package(Eigen3 REQUIRED)
 find_package(yaml-cpp REQUIRED)
 
@@ -34,6 +35,7 @@ target_link_libraries(${PROJECT_NAME} yaml-cpp)
 ament_target_dependencies(
   modNAV
   "rclcpp"
+  "sensor_msgs"
   "Eigen3"
   "yaml-cpp"
 )

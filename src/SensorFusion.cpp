@@ -4,7 +4,7 @@
 #include <thread> 
 #include "plog/Log.h"
 
-SensorFusion::SensorFusion(ConfigManager::Config aConfig) : mConfig(aConfig), mRobot(aConfig.mRobot), mSensors(aConfig.mSensors)
+SensorFusion::SensorFusion(ConfigManager::Config& aConfig) : mConfig(aConfig), mRobot(aConfig.mRobot), mSensors(aConfig.mSensors)
 {
 
 }
@@ -26,7 +26,7 @@ void SensorFusion::run()
         auto start = std::chrono::steady_clock::now(); 
  
         LOGD << "doing SensorFusion"; 
-        //doSensorFusion();   
+        doSensorFusion();   
 
         auto end = std::chrono::steady_clock::now(); 
         auto elapsed = end - start; 
@@ -42,12 +42,21 @@ void SensorFusion::run()
 
 void SensorFusion::doSensorFusion()
 {
-    mKalmanFilter->predict(); 
-    
-    for(const auto& [type, sensor] : mSensors)
+    if(!mConfig.mSensors.empty())
     {
-        auto measurement = sensor->getMeasurement();
-        auto covariance = sensor->getMeasurementCovariance();  
-        mKalmanFilter->update(measurement, covariance); 
+        for(const auto& [type, sensor] : mConfig.mSensors)
+        {
+            auto measurement = sensor->getMeasurement(); 
+            LOGD << "Sensor: " << type << " Measurement: " << measurement; 
+        }
     }
+    
+    // mKalmanFilter->predict(); 
+    
+    // for(const auto& [type, sensor] : mSensors)
+    // {
+    //     auto measurement = sensor->getMeasurement();
+    //     auto covariance = sensor->getMeasurementCovariance();  
+    //     mKalmanFilter->update(measurement, covariance); 
+    // }
 }
