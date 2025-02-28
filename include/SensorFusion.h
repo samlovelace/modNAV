@@ -15,10 +15,7 @@ public:
     void run(); 
 
 private:
-    std::shared_ptr<IRobot> mRobot;  
     std::unique_ptr<KalmanFilter> mKalmanFilter; 
-    std::map<std::string, std::shared_ptr<ISensor>> mSensors; 
-
     ConfigManager::Config& mConfig; 
 
     void doSensorFusion(); 

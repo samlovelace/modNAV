@@ -6,13 +6,13 @@
 
 std::shared_ptr<ISensor> SensorFactory::create(const std::string& aSensorType, const std::string& aSensorName)
 {
-    SensorType typeToCreate = stringToEnum(aSensorType, aSensorName); 
+    SensorImpl typeToCreate = stringToEnum(aSensorType, aSensorName); 
 
-    if(SensorType::GAZEBO_IMU == typeToCreate)
+    if(SensorImpl::GAZEBO_IMU == typeToCreate)
     {
         return std::make_shared<GazeboImu>(); 
     }
-    else if (SensorType::GAZEBO_GPS == typeToCreate)
+    else if (SensorImpl::GAZEBO_GPS == typeToCreate)
     {
         return std::make_shared<GazeboGps>(); 
     }
@@ -24,29 +24,29 @@ std::shared_ptr<ISensor> SensorFactory::create(const std::string& aSensorType, c
     
 }
 
-SensorFactory::SensorType SensorFactory::stringToEnum(const std::string& aSensorType, const std::string& aSensorName)
+SensorFactory::SensorImpl SensorFactory::stringToEnum(const std::string& aSensorImpl, const std::string& aSensorName)
 {
-    SensorFactory::SensorType enumToReturn; 
+    SensorFactory::SensorImpl enumToReturn; 
 
     if("gazebo" == aSensorName || "Gazebo" == aSensorName)
     {
-        if("imu" == aSensorType || "IMU" == aSensorType)
+        if("imu" == aSensorImpl || "IMU" == aSensorImpl)
         {
-            enumToReturn = SensorType::GAZEBO_IMU; 
+            enumToReturn = SensorImpl::GAZEBO_IMU; 
         }
-        else if ("gps" == aSensorType || "GPS" == aSensorType)
+        else if ("gps" == aSensorImpl || "GPS" == aSensorImpl)
         {
-            enumToReturn = SensorType::GAZEBO_GPS; 
+            enumToReturn = SensorImpl::GAZEBO_GPS; 
         } 
         else{
             LOGE << "Unsupported gazebo sensor with name: " << aSensorName.c_str(); 
-            return SensorFactory::SensorType::NUM_TYPES; 
+            return SensorFactory::SensorImpl::NUM_TYPES; 
         }
     }
     else 
     {
-        LOGE << "Unsupported sensor type: " << aSensorType.c_str(); 
-        return SensorFactory::SensorType::NUM_TYPES; 
+        LOGE << "Unsupported sensor type: " << aSensorImpl.c_str(); 
+        return SensorFactory::SensorImpl::NUM_TYPES; 
     }
 
     return enumToReturn; 

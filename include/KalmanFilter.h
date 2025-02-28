@@ -7,7 +7,7 @@
 class KalmanFilter 
 { 
 public:
-    KalmanFilter();
+    KalmanFilter(std::shared_ptr<IRobot> aRobot);
     ~KalmanFilter();
 
     void predict(); 

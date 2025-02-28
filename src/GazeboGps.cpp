@@ -21,7 +21,8 @@ Eigen::MatrixXd GazeboGps::getMeasurementCovariance()
 {
 
 }
-std::string GazeboGps::getType() const
-{
 
+ISensor::SensorType GazeboGps::getType() const
+{
+    return ISensor::SensorType::GPS; 
 }

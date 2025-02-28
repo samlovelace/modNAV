@@ -47,7 +47,7 @@ bool ConfigManager::parseConfig(const std::string& aFilename)
         LOGD << "Using " << sensorName << " " << sensorType; 
 
         std::shared_ptr<ISensor> s = SensorFactory::create(sensorType, sensorName); 
-        mConfig.mSensors.insert({sensorType, s});
+        mConfig.mSensors.insert({s->getType(), s});
     }
 
     return true; 

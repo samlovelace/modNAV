@@ -4,7 +4,8 @@
 #include <thread> 
 #include "plog/Log.h"
 
-SensorFusion::SensorFusion(ConfigManager::Config& aConfig) : mConfig(aConfig), mRobot(aConfig.mRobot), mSensors(aConfig.mSensors)
+SensorFusion::SensorFusion(ConfigManager::Config& aConfig) : mConfig(aConfig), 
+            mKalmanFilter(std::make_unique<KalmanFilter>(aConfig.mRobot))
 {
 
 }
@@ -42,21 +43,39 @@ void SensorFusion::run()
 
 void SensorFusion::doSensorFusion()
 {
-    if(!mConfig.mSensors.empty())
+    if(!mConfig.mSensors.empty() && nullptr != mConfig.mRobot)
     {
+        if(mConfig.mSensors.find(ISensor::SensorType::IMU) != mConfig.mSensors.end())
+        {
+            auto sensor = mConfig.mSensors.at(ISensor::SensorType::IMU); 
+            LOGW << "GETTING IMU MEASUREMENT"; 
+            auto measurement = sensor->getMeasurement();
+            LOGW << "measurement: " << measurement; 
+            
+            LOGW << "SETTING PRED MEASUREMENT"; 
+            mConfig.mRobot->SetPredictionMeasurement(measurement); 
+            LOGW << "DONE SETTING PRED MEASUREMENT"; 
+        }
+
+        LOGW << "DOING KALMAN PREDICTION"; 
+        // kalman filter prediction step
+        mKalmanFilter->predict();
+
+        // kalman filter update for each sensor
         for(const auto& [type, sensor] : mConfig.mSensors)
         {
+            if(ISensor::SensorType::IMU == type)
+            {
+                continue; 
+            }
+
             auto measurement = sensor->getMeasurement(); 
-            LOGD << "Sensor: " << type << " Measurement: " << measurement; 
+            auto covariance = sensor->getMeasurementCovariance(); 
+            mKalmanFilter->update(measurement, covariance); 
         }
     }
-    
-    // mKalmanFilter->predict(); 
-    
-    // for(const auto& [type, sensor] : mSensors)
-    // {
-    //     auto measurement = sensor->getMeasurement();
-    //     auto covariance = sensor->getMeasurementCovariance();  
-    //     mKalmanFilter->update(measurement, covariance); 
-    // }
+    else{
+        LOGE << "Sensor and Robot do not exist..."; 
+        return; 
+    }
 }

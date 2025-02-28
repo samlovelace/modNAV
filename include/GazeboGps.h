@@ -9,9 +9,9 @@ public:
     GazeboGps();
     ~GazeboGps();
 
-    Eigen::VectorXd getMeasurement();
-    Eigen::MatrixXd getMeasurementCovariance();
-    std::string getType() const;
+    Eigen::VectorXd getMeasurement() override; 
+    Eigen::MatrixXd getMeasurementCovariance() override; 
+    SensorType getType() const override; 
 
 private:
    

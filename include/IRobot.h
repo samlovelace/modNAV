@@ -12,7 +12,11 @@ public:
     virtual Eigen::MatrixXd measurementMatrix() = 0; 
     virtual Eigen::MatrixXd controlInputMatrix() = 0; 
     virtual Eigen::MatrixXd processNoiseCovariance() = 0; 
-    virtual Eigen::MatrixXd controlInput() = 0; 
+     
+    virtual Eigen::VectorXd getPredictionMeasurement() = 0; 
+    virtual int stateSize() = 0; 
+
+    virtual void SetPredictionMeasurement(const Eigen::VectorXd& aControlInput) = 0;
 
 protected: 
    

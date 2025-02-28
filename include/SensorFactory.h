@@ -10,7 +10,7 @@ public:
     SensorFactory();
     ~SensorFactory();
 
-    enum class SensorType
+    enum class SensorImpl
     {
         GAZEBO_IMU, 
         GAZEBO_GPS, 
@@ -18,7 +18,7 @@ public:
     }; 
 
     static std::shared_ptr<ISensor> create(const std::string& aSensorType, const std::string& aSensorName); 
-    static SensorType stringToEnum(const std::string& aSensorType, const std::string& aSensorName);
+    static SensorImpl stringToEnum(const std::string& aSensorType, const std::string& aSensorName);
 private: 
    
 };

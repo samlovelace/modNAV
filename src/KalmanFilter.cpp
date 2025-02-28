@@ -1,7 +1,10 @@
 
 #include "KalmanFilter.h"
+#include "plog/Log.h"
 
-KalmanFilter::KalmanFilter()
+KalmanFilter::KalmanFilter(std::shared_ptr<IRobot> aRobot) : mRobot(aRobot), 
+                        mPrevStateEstimate(Eigen::VectorXd::Zero(aRobot->stateSize())), 
+                        mPrevCovarianceMatrix(Eigen::MatrixXd::Zero(aRobot->stateSize(), aRobot->stateSize()))
 {
 
 }
@@ -18,15 +21,18 @@ void KalmanFilter::predict()
     Eigen::MatrixXd Q = mRobot->processNoiseCovariance();
 
     // Predict state
-    if (B.cols() == mRobot->controlInput().size()) {
-        mStatePrediction = F * mPrevStateEstimate + B * mRobot->controlInput();
+    if (B.cols() == mRobot->getPredictionMeasurement().size()) {
+        mStatePrediction = F * mPrevStateEstimate + B * mRobot->getPredictionMeasurement();
     } else {
         mStatePrediction = F * mPrevStateEstimate;  // No control input
     }
 
+    LOGW << "mStatePred: " << mStatePrediction; 
+
     // Predict covariance
     Eigen::MatrixXd F_T = F.transpose();
     mCovariancePrediction = F * mPrevCovarianceMatrix * F_T + Q;
+    LOGW << "DONE PREDICTION"; 
 }
 
 void KalmanFilter::update(Eigen::VectorXd z, Eigen::MatrixXd R)

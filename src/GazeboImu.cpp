@@ -3,7 +3,7 @@
 #include "plog/Log.h"
 #include <rclcpp/rclcpp.hpp>
 
-GazeboImu::GazeboImu() : Node("modnav")
+GazeboImu::GazeboImu() : Node("modnav"), mLatestMeasurement(Eigen::VectorXd::Zero(6))
 {
     LOGD << "GazeboIMU Constructed!"; 
 
@@ -34,9 +34,10 @@ Eigen::MatrixXd GazeboImu::getMeasurementCovariance()
 {
 
 }
-std::string GazeboImu::getType() const
+
+ISensor::SensorType GazeboImu::getType() const
 {
-    return "imu"; 
+    return SensorType::IMU; 
 }
 
 void GazeboImu::sensorCallback(sensor_msgs::msg::Imu::SharedPtr aMsg)
