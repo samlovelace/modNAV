@@ -32,7 +32,6 @@ void KalmanFilter::predict()
     // Predict covariance
     Eigen::MatrixXd F_T = F.transpose();
     mCovariancePrediction = F * mPrevCovarianceMatrix * F_T + Q;
-    LOGW << "DONE PREDICTION"; 
 }
 
 void KalmanFilter::update(Eigen::VectorXd z, Eigen::MatrixXd R)
@@ -44,8 +43,12 @@ void KalmanFilter::update(Eigen::VectorXd z, Eigen::MatrixXd R)
         throw std::runtime_error("Measurement size mismatch.");
     }
 
+    // z.resize(6, 1);
+    // mStatePrediction.resize(6, 1);
+
     // Measurement residual
-    Eigen::VectorXd y = z - H * mStatePrediction;
+    Eigen::VectorXd predictedMeasurement = H*mStatePrediction; 
+    Eigen::VectorXd y = z - predictedMeasurement;
 
     // Innovation covariance
     Eigen::MatrixXd S = H * mCovariancePrediction * H.transpose() + R;

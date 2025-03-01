@@ -13,6 +13,8 @@ public:
     void predict(); 
     void update(Eigen::VectorXd aMeasurementVector, Eigen::MatrixXd aMeasurementCovarianceMatrix); 
 
+    Eigen::VectorXd getStateEstimate() {return mStateEstimate; }
+
 private:
     std::shared_ptr<IRobot> mRobot;
     

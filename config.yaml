@@ -8,9 +8,9 @@ robot:
       name: gazebo
       noise_covariance: 0.01
 
-    #gps:
-    #  name: gazebo
-    #  noise_covariance: 0.5
+    gps:
+      name: gazebo
+      noise_covariance: 0.5
 
   kalman_filter:
     state_dim: 4

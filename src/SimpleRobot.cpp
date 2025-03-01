@@ -25,13 +25,7 @@ Eigen::MatrixXd SimpleRobot::stateTransitionMatrix()
 // 🔹 Measurement Matrix (H) - Relates state to sensor readings
 Eigen::MatrixXd SimpleRobot::measurementMatrix()
 {
-    Eigen::MatrixXd H(4, STATE_SIZE); // Assuming sensors measure x, y, theta, omega
-    H.setZero();
-
-    H(0, 0) = 1; // Measuring x position
-    H(1, 1) = 1; // Measuring y position
-    H(2, 2) = 1; // Measuring theta
-    H(3, 5) = 1; // Measuring omega
+    auto H = Eigen::MatrixXd::Identity(STATE_SIZE, STATE_SIZE); // Assuming sensors measure x, y, theta, omega
 
     return H;
 }
@@ -68,7 +62,6 @@ Eigen::MatrixXd SimpleRobot::processNoiseCovariance()
 void SimpleRobot::SetPredictionMeasurement(const Eigen::VectorXd& aMeasurement)
 {
     mPredMeasurement << aMeasurement(0), aMeasurement(1), aMeasurement(5);
-    LOGW << "Stil in fcn after settting mpredmeasurement"; 
 }
 
 Eigen::VectorXd SimpleRobot::getPredictionMeasurement()

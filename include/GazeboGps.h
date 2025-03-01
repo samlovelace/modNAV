@@ -2,8 +2,13 @@
 #define GAZEBOGPS_H
 
 #include "ISensor.h"
- 
-class GazeboGps : public ISensor
+#include <rclcpp/rclcpp.hpp>
+#include <geometry_msgs/msg/pose_with_covariance_stamped.hpp>
+#include <eigen3/Eigen/Dense>
+#include <mutex>
+#include <thread>
+
+class GazeboGps : public ISensor, public rclcpp::Node
 { 
 public:
     GazeboGps();
@@ -14,6 +19,18 @@ public:
     SensorType getType() const override; 
 
 private:
-   
+    void sensorCallback(geometry_msgs::msg::PoseWithCovarianceStamped::SharedPtr aMsg); 
+
+    rclcpp::Subscription<geometry_msgs::msg::PoseWithCovarianceStamped>::SharedPtr mSubscriber; 
+
+    std::thread mSpinThread;
+    std::mutex mMutex;
+
+    Eigen::VectorXd mState;       // [x, y, theta, vx, vy, omega]
+    Eigen::MatrixXd mCovariance;  // Measurement covariance
+
+    Eigen::VectorXd mLastState;   // Previous state for velocity computation
+    rclcpp::Time mLastTimestamp;  // Last received timestamp
 };
-#endif //GAZEBOIMU_H
+
+#endif // GAZEBOGPS_H
