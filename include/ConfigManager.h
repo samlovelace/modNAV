@@ -24,7 +24,9 @@ public:
     {
         Settings mSettings; 
         std::shared_ptr<IRobot> mRobot;
-        std::map<ISensor::SensorType, std::shared_ptr<ISensor>> mSensors; 
+        std::map<ISensor::SensorType, std::shared_ptr<ISensor>> mSensors;
+        std::vector<std::shared_ptr<ISensor>> mPredictionSensors; 
+        std::vector<std::shared_ptr<ISensor>> mUpdateSensors; 
     };
 
 

@@ -44,10 +44,25 @@ bool ConfigManager::parseConfig(const std::string& aFilename)
     {
         std::string sensorType = sensor.first.as<std::string>(); 
         std::string sensorName = sensor.second["name"].as<std::string>(); 
+        std::string filterStep = sensor.second["step"].as<std::string>(); 
         LOGD << "Using " << sensorName << " " << sensorType; 
 
         std::shared_ptr<ISensor> s = SensorFactory::create(sensorType, sensorName); 
-        mConfig.mSensors.insert({s->getType(), s});
+
+        if("predict" == filterStep)
+        {
+            mConfig.mPredictionSensors.push_back(s); 
+        }
+        else if ("update" == filterStep)
+        {
+            mConfig.mUpdateSensors.push_back(s); 
+        }
+        else
+        {
+            LOGE << "Unsupported sensor usage step: " << filterStep 
+                 << ". Options are 'predict' or 'update'."; 
+            return false; 
+        }
     }
 
     return true; 

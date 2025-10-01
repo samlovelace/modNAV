@@ -44,35 +44,21 @@ void SensorFusion::run()
 
 void SensorFusion::doSensorFusion()
 {
-    if(!mConfig.mSensors.empty() && nullptr != mConfig.mRobot)
+    for(const auto& sensor : mConfig.mPredictionSensors)
     {
-        if(mConfig.mSensors.find(ISensor::SensorType::IMU) != mConfig.mSensors.end())
-        {
-            auto sensor = mConfig.mSensors.at(ISensor::SensorType::IMU); 
-            auto measurement = sensor->getMeasurement(); 
-            mConfig.mRobot->SetPredictionMeasurement(measurement); 
-
-        }
- 
-        // kalman filter prediction step
-        mKalmanFilter->predict();
-
-        // kalman filter update for each sensor
-        for(const auto& [type, sensor] : mConfig.mSensors)
-        {
-            if(ISensor::SensorType::IMU == type)
-            {
-                continue; 
-            }
-
-            auto measurement = sensor->getMeasurement(); 
-            auto covariance = sensor->getMeasurementCovariance(); 
-            mKalmanFilter->update(measurement, covariance); 
-        }
+        auto measurement = sensor->getMeasurement(); 
+        mConfig.mRobot->SetPredictionMeasurement(measurement); 
     }
-    else{
-        LOGE << "Sensor and Robot do not exist..."; 
-        return; 
+ 
+    // kalman filter prediction step
+    mKalmanFilter->predict();
+
+    // kalman filter update for each sensor
+    for(const auto& sensor : mConfig.mUpdateSensors)
+    {
+        auto measurement = sensor->getMeasurement(); 
+        auto covariance = sensor->getMeasurementCovariance(); 
+        mKalmanFilter->update(measurement, covariance); 
     }
 
     LOGD << "StateEstimate: " << mKalmanFilter->getStateEstimate(); 

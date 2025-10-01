@@ -7,10 +7,12 @@ robot:
     imu:
       name: gazebo
       noise_covariance: 0.01
+      step: predict
 
     gps:
       name: gazebo
       noise_covariance: 0.5
+      step: update
 
   kalman_filter:
     state_dim: 4
